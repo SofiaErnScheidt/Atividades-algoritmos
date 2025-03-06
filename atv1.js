@@ -11,37 +11,40 @@
 // Para o segundo digito:
 // Faça o mesmo, porém multiplicando de 11 a 2
 
-function calcularDigitos(cpf) {
-    // Transformar os 9 primeiros números do CPF em uma lista
-    let numeros = cpf.split("").map(Number)
-
-    // Calcular o primeiro dígito
-    let soma1 = 0
-    let peso1 = 10 // Começa com peso 10
-    for (let i = 0; i < 9; i++) {
-        soma1 += numeros[i] * peso1
-        peso1--; // Diminui o peso a cada passo
+//função para verifir o cpf 
+//def variavel e a formula para o caluclo dos dígitos
+function calcularDigito(cpf, multiplicadores) {
+    let soma = 0;
+    for (let i = 0; i < multiplicadores.length; i++) {
+        soma += cpf[i] * multiplicadores[i]
     }
-    let resto1 = soma1 % 11
-    let primeiroDigito = resto1 < 2 ? 0 : 11 - resto1
-
-    // Adicionar o primeiro dígito para calcular o segundo
-    numeros.push(primeiroDigito)
-
-    // Calcular o segundo dígito
-    let soma2 = 0
-    let peso2 = 11 // Começa com peso 11
-    for (let i = 0; i < 10; i++) {
-        soma2 += numeros[i] * peso2
-        peso2--; // Diminui o peso
-    }
-    let resto2 = soma2 % 11
-    let segundoDigito = resto2 < 2 ? 0 : 11 - resto2
-
-    return `${primeiroDigito}${segundoDigito}` // Retorna os dois dígitos
+    let resto = soma % 11
+    return resto < 2 ? 0 : 11 - resto
 }
 
-// Testar com um exemplo
-let cpf = "123456789" // Use os 9 primeiros números do CPF
-let digitosVerificadores = calcularDigitos(cpf)
-console.log("Dígitos verificadores:", digitosVerificadores)
+function verificarCPF(cpf) {
+    if (cpf.length !== 11) {
+        return false
+    }
+    // converter para um array de números
+    cpf = cpf.split('').map(Number)
+
+    // multiplica para o primeiro dígito verificador (10 a 2)
+    let multiplicadores1 = [10, 9, 8, 7, 6, 5, 4, 3, 2]
+    let digito1 = calcularDigito(cpf, multiplicadores1)
+
+    // miltiplica para o segundo dígito verificador (11 a 2)
+    let multiplicadores2 = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2]
+    let digito2 = calcularDigito(cpf.concat(digito1), multiplicadores2)
+
+    // verficar os dígitos 
+    return digito1 === cpf[9] && digito2 === cpf[10]
+}
+
+// uso naa prática
+let cpf = "12059779900"
+if (verificarCPF(cpf)) {
+    console.log("CPF válido")
+} else {
+    console.log("CPF inválido")
+}
