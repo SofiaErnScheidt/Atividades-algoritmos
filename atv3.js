@@ -54,3 +54,9 @@ function verificarEAN(codigoBarras) {
 // Exemplo de uso
 let codigoBarras = "7891234567895" // Insira um código EAN-13 válido aqui
 verificarEAN(codigoBarras)
+
+
+
+
+
+
