@@ -1,39 +1,35 @@
 // Algoritmo gerador de CNPJ
 // Pesquisar as regras online e criar um algoritmo que gere um cnpj válido
 
-function validaCNPJ(cnpj) {
-    var numeros = cnpj.replace(/[^0-9]/g, '')
-
-  
-    if (numeros.length !== 14 || numeros === '00000000000000') {
-        return false
+function multiplicarNumeros (array_base, array_multiplicacao) {
+    let soma = 0
+    for (let i = 0; i<array_base.length; i++) {
+        soma += array_base[i] * array_multiplicacao[i]
     }
 
-    
-    var soma = 0
-    var pesos = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
-    for (var i = 0; i < 12; i++) {
-        soma += numeros[i] * pesos[i]
-    }
-    var resto = soma % 11
-    var digito1 = resto < 2 ? 0 : 11 - resto
-    if (numeros[12] != digito1) {
-        return false
-    }
+    let resto = soma % 11 
+    let digito
 
-    
-    soma = 0
-    pesos.unshift(6)
-    for (var i = 0; i < 13; i++) {
-        soma += numeros[i] * pesos[i]
+    if (resto < 2) {
+        digito = 0
+    } else {
+        digito = 11 - resto
     }
-    resto = soma % 11
-    var digito2 = resto < 2 ? 0 : 11 - resto
-    if (numeros[13] != digito2) {
-        return false
-    }
-
-    return true 
-
+    return digito
 }
-console.log(validaCNPJ("12345678000195"))
+
+function gerarCNPJ () {
+    let numero_base = Math.floor(Math.random() * 100000000)
+    numero_base = numero_base.toString() + '0001'
+    let array_base = numero_base.split('')
+    let array_multiplicacao = [5,4,3,2,9,8,7,6,5,4,3,2]
+    let digito1 = multiplicarNumeros(array_base, array_multiplicacao)
+    array_base.push(digito1.toString())
+    array_multiplicacao.unshift(6)
+    let digito2 = multiplicarNumeros(array_base, array_multiplicacao)
+    array_base.push(digito2.toString())
+
+    return array_base.join('')
+}
+let CNPJ = gerarCNPJ()
+console.log(CNPJ)
